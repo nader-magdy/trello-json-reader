@@ -1,16 +1,20 @@
+const argv = require('yargs').argv;
+
 console.log(process.argv.slice(2));
 
-let boards = process.argv.slice(2);
+let boards = Array.isArray(argv.board) ? argv.board : [argv.board];
+
+console.log(boards);
 boards.forEach(boardName => {
   let board = require(`./boards/${boardName}.json`);
-  
+
   function getCardLabels(card) {
     return board.labels.map(l => {
       return card.idLabels.indexOf(l.id) > -1 ? l.name : ''
     }).join(', ');
-  
+
   }
-  
+
   console.log('************************************');
   console.log('Reading board ->\t', board.name);
   console.log('************************************');
@@ -21,14 +25,16 @@ boards.forEach(boardName => {
     let listCards = board.cards.filter(c => c.idList == list.id);
     console.log('Number of cards:\t', listCards.length);
     console.log('-------------');
-    listCards.forEach(card => {
-      console.log(`${card.name}, ${getCardLabels(card)}, ${card.shortUrl}`);
-    });
-    console.log('------------------------------');
+    if (argv.showCards) {
+      listCards.forEach(card => {
+        console.log(`${card.name}, ${getCardLabels(card)}, ${card.shortUrl}`);
+      });
+      console.log('------------------------------');
+    }
   });
-  
+
   console.log('************************************');
-  
+
 });
 
 
