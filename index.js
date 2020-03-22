@@ -24,6 +24,12 @@ boards.forEach(boardName => {
     console.log('List:\t\t\t', list.name);
     let listCards = board.cards.filter(c => c.idList == list.id);
     console.log('Number of cards:\t', listCards.length);
+
+    if(argv.labelsSummary){
+      board.labels.forEach(l => {
+        console.log(`${l.name} -> number of cards:\t  ${listCards.filter(c => c.idLabels.indexOf(l.id) > -1).length}`);
+      });
+    }
     console.log('-------------');
     if (argv.showCards) {
       listCards.forEach(card => {
